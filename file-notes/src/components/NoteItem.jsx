@@ -7,12 +7,22 @@ function timeAgo(ts) {
   const diff = Date.now() - ts;
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return "just now";
-  if (mins < 60) return ${mins}m ago;
+  if (mins < 60) return `${mins}m ago`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return ${hrs}h ago;
+  if (hrs < 24) return `${hrs}h ago`;
   const days = Math.floor(hrs / 24);
-  return ${days}d ago;
+  return `${days}d ago`;
 }
+
+function onCopy() {
+  navigator.clipboard
+    .writeText(`${note.title}\n\n${note.content}`)
+    .then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+}
+
 
 export default function NoteItem({ fileId, note }) {
   const dispatch = useDispatch();
@@ -20,11 +30,14 @@ export default function NoteItem({ fileId, note }) {
   const [copied, setCopied] = useState(false);
 
   function onCopy() {
-    navigator.clipboard.writeText(${note.title}\n\n${note.content}).then(() => {
+  navigator.clipboard
+    .writeText(`${note.title}\n\n${note.content}`)
+    .then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
-  }
+}
+
 
   function onDelete() {
     if (!window.confirm("Delete this note?")) return;
